@@ -22,12 +22,12 @@
 #define ACTION_SIZE 30
 //#define SERIAL_DEBUG
 
-InternalEEPromConfig::InternalEEPromConfig() {
+StyraConfigInternalEEProm::StyraConfigInternalEEProm() {
         _initialized = false;
 }
 
 
-void InternalEEPromConfig::begin() {
+void StyraConfigInternalEEProm::begin() {
   _initialized = true;
   this->_num_configs = 0;
   this->_conf_table = this->getConfigTableFromEEProm();
@@ -39,11 +39,11 @@ void InternalEEPromConfig::begin() {
   this->_conf_info = this->getConfigInfoFromEEProm(this->_conf_table.config[this->_active_config_index]);
 }
 
-void InternalEEPromConfig::storeMacro(ButtonMacro value, uint8_t button) {
+void StyraConfigInternalEEProm::storeMacro(ButtonMacro value, uint8_t button) {
   storeButtonMacro(value,this->_conf_info.offset + button);
 }
 
-void InternalEEPromConfig::storeButtonMacro(ButtonMacro value, uint16_t page) {
+void StyraConfigInternalEEProm::storeButtonMacro(ButtonMacro value, uint16_t page) {
   uint16_t EEPROM_address = page * sizeof(ButtonMacro);
   byte* p = (byte*)(void*)&value;
 
@@ -53,7 +53,7 @@ void InternalEEPromConfig::storeButtonMacro(ButtonMacro value, uint16_t page) {
 
 }
 
-void InternalEEPromConfig::storeConfigTable(ConfigTable value) {
+void StyraConfigInternalEEProm::storeConfigTable(ConfigTable value) {
   uint16_t EEPROM_address = 0 ;/* The ConfigTable is always stored at address 0 */
   byte* p = (byte*)(void*)&value;
 
@@ -62,7 +62,7 @@ void InternalEEPromConfig::storeConfigTable(ConfigTable value) {
   }
 }
 
-void InternalEEPromConfig::storeConfigInfo(ConfigInfo value,uint16_t page) {
+void StyraConfigInternalEEProm::storeConfigInfo(ConfigInfo value,uint16_t page) {
   uint16_t EEPROM_address = page * sizeof(ConfigInfo);
   byte* p = (byte*)(void*)&value;
 
@@ -72,7 +72,7 @@ void InternalEEPromConfig::storeConfigInfo(ConfigInfo value,uint16_t page) {
 }
 
 
-ButtonMacro InternalEEPromConfig::getMacro(uint8_t button) {
+ButtonMacro StyraConfigInternalEEProm::getMacro(uint8_t button) {
   ButtonMacro value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = (this->_conf_info.offset + button) * sizeof(ButtonMacro);
@@ -84,7 +84,7 @@ ButtonMacro InternalEEPromConfig::getMacro(uint8_t button) {
   return value;
 }
 
-ButtonMacro InternalEEPromConfig::getButtonMacroFromEEProm(uint16_t page) {
+ButtonMacro StyraConfigInternalEEProm::getButtonMacroFromEEProm(uint16_t page) {
   ButtonMacro value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = page * sizeof(ButtonMacro);
@@ -97,7 +97,7 @@ ButtonMacro InternalEEPromConfig::getButtonMacroFromEEProm(uint16_t page) {
 }
 
 
-ConfigInfo InternalEEPromConfig::getConfigInfoFromEEProm(uint16_t page) {
+ConfigInfo StyraConfigInternalEEProm::getConfigInfoFromEEProm(uint16_t page) {
   ConfigInfo value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = page * sizeof(ConfigInfo);
@@ -109,7 +109,7 @@ ConfigInfo InternalEEPromConfig::getConfigInfoFromEEProm(uint16_t page) {
   return value;
 }
 
-ConfigTable InternalEEPromConfig::getConfigTableFromEEProm() {
+ConfigTable StyraConfigInternalEEProm::getConfigTableFromEEProm() {
   ConfigTable value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = 0;
@@ -121,20 +121,20 @@ ConfigTable InternalEEPromConfig::getConfigTableFromEEProm() {
   return value;
 }
 
-uint8_t InternalEEPromConfig::getNumConfigs() {
+uint8_t StyraConfigInternalEEProm::getNumConfigs() {
   return this->_conf_table.num_configs;
 }
-ConfigInfo InternalEEPromConfig::getConfigInfo() {
+ConfigInfo StyraConfigInternalEEProm::getConfigInfo() {
   return this->_conf_info;
 }
-void InternalEEPromConfig::setActiveConfig(uint8_t index) {
+void StyraConfigInternalEEProm::setActiveConfig(uint8_t index) {
   if (index < this->_num_configs ) {
     this->_active_config_index = 0;
     this->_conf_info = this->getConfigInfoFromEEProm(this->_conf_table.config[this->_active_config_index]);  
   }
   return;
 }
-uint8_t InternalEEPromConfig::getActiveConfig() {
+uint8_t StyraConfigInternalEEProm::getActiveConfig() {
   return this->_active_config_index;
 }
 

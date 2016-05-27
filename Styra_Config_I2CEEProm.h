@@ -28,10 +28,10 @@
 #define DEVICE_ADDRESS 0x50
 
 
-class I2CEEPromConfig:  public StyraConfig
+class StyraConfigI2CEEProm:  public StyraConfig
 {
 public:
-    I2CEEPromConfig() {
+    StyraConfigI2CEEProm() {
         _initialized = false;
     }
     void init();

@@ -21,7 +21,7 @@
 
 #define ACTION_SIZE 30
 
-void I2CEEPromConfig::init() {
+void StyraConfigI2CEEProm::init() {
   if (! _initialized) {
     Wire.begin(); 
     _initialized = true;
@@ -29,7 +29,7 @@ void I2CEEPromConfig::init() {
 
 }
 
-void I2CEEPromConfig::begin() {
+void StyraConfigI2CEEProm::begin() {
   this->init();
   this->_num_configs = 0;
   this->_conf_table = this->getConfigTableFromEEProm();
@@ -41,11 +41,11 @@ void I2CEEPromConfig::begin() {
   this->_conf_info = this->getConfigInfoFromEEProm(this->_conf_table.config[this->_active_config_index]);
 }
 
-void I2CEEPromConfig::storeMacro(ButtonMacro value, uint8_t button) {
+void StyraConfigI2CEEProm::storeMacro(ButtonMacro value, uint8_t button) {
   storeButtonMacro(value,this->_conf_info.offset + button);
 }
 
-void I2CEEPromConfig::storeButtonMacro(ButtonMacro value, uint16_t page) {
+void StyraConfigI2CEEProm::storeButtonMacro(ButtonMacro value, uint16_t page) {
   uint16_t EEPROM_address = page * 64;
   byte* p = (byte*)(void*)&value;
 
@@ -71,7 +71,7 @@ void I2CEEPromConfig::storeButtonMacro(ButtonMacro value, uint16_t page) {
   }
 }
 
-void I2CEEPromConfig::storeConfigTable(ConfigTable value) {
+void StyraConfigI2CEEProm::storeConfigTable(ConfigTable value) {
   uint16_t EEPROM_address = 0 ;/* The ConfigTable is always stored at address 0 */
   byte* p = (byte*)(void*)&value;
 
@@ -97,7 +97,7 @@ void I2CEEPromConfig::storeConfigTable(ConfigTable value) {
   }
 }
 
-void I2CEEPromConfig::storeConfigInfo(ConfigInfo value,uint16_t page) {
+void StyraConfigI2CEEProm::storeConfigInfo(ConfigInfo value,uint16_t page) {
   uint16_t EEPROM_address = page * 64;
   byte* p = (byte*)(void*)&value;
 
@@ -124,7 +124,7 @@ void I2CEEPromConfig::storeConfigInfo(ConfigInfo value,uint16_t page) {
 }
 
 
-ButtonMacro I2CEEPromConfig::getMacro(uint8_t button) {
+ButtonMacro StyraConfigI2CEEProm::getMacro(uint8_t button) {
   ButtonMacro value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = (this->_conf_info.offset + button) * 64;
@@ -151,7 +151,7 @@ ButtonMacro I2CEEPromConfig::getMacro(uint8_t button) {
   return value;
 }
 
-ButtonMacro I2CEEPromConfig::getButtonMacroFromEEProm(uint16_t page) {
+ButtonMacro StyraConfigI2CEEProm::getButtonMacroFromEEProm(uint16_t page) {
   ButtonMacro value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = page * 64;
@@ -179,7 +179,7 @@ ButtonMacro I2CEEPromConfig::getButtonMacroFromEEProm(uint16_t page) {
 }
 
 
-ConfigInfo I2CEEPromConfig::getConfigInfoFromEEProm(uint16_t page) {
+ConfigInfo StyraConfigI2CEEProm::getConfigInfoFromEEProm(uint16_t page) {
   ConfigInfo value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = page * 64;
@@ -206,7 +206,7 @@ ConfigInfo I2CEEPromConfig::getConfigInfoFromEEProm(uint16_t page) {
   return value;
 }
 
-ConfigTable I2CEEPromConfig::getConfigTableFromEEProm() {
+ConfigTable StyraConfigI2CEEProm::getConfigTableFromEEProm() {
   ConfigTable value;
   byte* p = (byte*)(void*)&value;
   uint16_t EEPROM_address = 0;
@@ -234,24 +234,24 @@ ConfigTable I2CEEPromConfig::getConfigTableFromEEProm() {
   return value;
 }
 
-uint8_t I2CEEPromConfig::getNumConfigs() {
+uint8_t StyraConfigI2CEEProm::getNumConfigs() {
   return this->_conf_table.num_configs;
 }
-ConfigInfo I2CEEPromConfig::getConfigInfo() {
+ConfigInfo StyraConfigI2CEEProm::getConfigInfo() {
   return this->_conf_info;
 }
-void I2CEEPromConfig::setActiveConfig(uint8_t index) {
+void StyraConfigI2CEEProm::setActiveConfig(uint8_t index) {
   if (index < this->_num_configs ) {
     this->_active_config_index = 0;
     this->_conf_info = this->getConfigInfoFromEEProm(this->_conf_table.config[this->_active_config_index]);  
   }
   return;
 }
-uint8_t I2CEEPromConfig::getActiveConfig() {
+uint8_t StyraConfigI2CEEProm::getActiveConfig() {
   return this->_active_config_index;
 }
 
-uint8_t I2CEEPromConfig::getWriteStatus() {
+uint8_t StyraConfigI2CEEProm::getWriteStatus() {
   uint8_t status;
   Wire.beginTransmission(DEVICE_ADDRESS);
   status = Wire.endTransmission();

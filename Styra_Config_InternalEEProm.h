@@ -13,10 +13,10 @@
 
 #include "Styra_Config.h"
 
-class InternalEEPromConfig:  public StyraConfig
+class StyraConfigInternalEEProm:  public StyraConfig
 {
 public:
-    InternalEEPromConfig();
+    StyraConfigInternalEEProm();
     void begin();
  
     /* Return the number of key configurations defined

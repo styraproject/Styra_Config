@@ -81,7 +81,7 @@ private:
     uint8_t _index;
 };
 
-class STYRA_CONFIG_H
+class StyraConfig
 {
 public:
     virtual void begin()= 0;
