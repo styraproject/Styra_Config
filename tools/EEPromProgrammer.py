@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/opt/local/bin/python
 # Author:  Luke Hindman
 # Date:  Sun Oct  4 11:15:56 MDT 2015
 # Description:  This tool generates ButtonMacro configurations from python
@@ -12,6 +12,7 @@ import os
 import time
 import serial
 import sys
+import getopt
 
 import serial.tools.list_ports
 from usbid.usbinfo import USBINFO
@@ -302,6 +303,27 @@ def getArduinoSerialDevice():
 
 
 if __name__ == '__main__':
+
+
+    configFileName = 'button_macro.cfg'
+
+    try:    
+        opts, args = getopt.getopt(sys.argv[1:], "c:", ["config="])
+    except getopt.GetOptError:
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in ("-c", "--config"):
+            configFileName = arg
+        else:
+            print "Invalid Options"
+            sys.exit(2)
+
+    if not os.path.exists(configFileName):
+        print "Config file %s does not exist" % configFileName
+        sys.exit(1)
+    
+
     # Setup connection to arduino
     serial_device = getArduinoSerialDevice()
     arduino = serial.Serial(serial_device, 9600)
@@ -316,7 +338,7 @@ if __name__ == '__main__':
             n = raw_input("\n\n--> ")
             if n == "u":
                 
-                configFileName='button_macro.cfg'
+                
                 config = ConfigParser()
                 config.read(configFileName)
                 
