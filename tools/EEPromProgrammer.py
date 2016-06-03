@@ -1,4 +1,4 @@
-#!/opt/local/bin/python
+#!/usr/bin/python
 # Author:  Luke Hindman
 # Date:  Sun Oct  4 11:15:56 MDT 2015
 # Description:  This tool generates ButtonMacro configurations from python
@@ -99,7 +99,8 @@ arduinoMesgDict = {
     'STORE_CONFIG_TABLE':204,
     'GET_BUTTON_MACRO':205,
     'GET_CONFIG_INFO':206,
-    'GET_CONFIG_TABLE':207
+    'GET_CONFIG_TABLE':207,
+    'DONE':254
 }
 
 macro_action_size=28
@@ -241,6 +242,10 @@ def arduinoReset(arduino):
     arduino.flushInput()
     arduino.setDTR()
     time.sleep(0.5)
+
+def featherReset(device):
+    tmp_con = serial.Serial(device, 1200)
+    tmp_con.close()
 
 def arduinoHandshake(arduino):
     arduinoReset(arduino)
@@ -478,7 +483,12 @@ if __name__ == '__main__':
                 break
             elif n == "x":
                 print "Exiting..."
-                arduinoReset(arduino)
+                arduino.write(struct.pack("B",arduinoMesgDict['DONE']))
+                while struct.unpack("B", arduino.read(1))[0] != arduinoMesgDict['READY']:
+                    print "."
+                    time.sleep(0.5)
+                arduino.flushInput()
+                featherReset(serial_device)
                 running = False
                 break
                 

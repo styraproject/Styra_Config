@@ -85,13 +85,49 @@ class StyraConfig
 {
 public:
     virtual void begin()= 0;
-    /* Return next byte of macro or 0 when finished */
-    virtual void storeMacro(ButtonMacro macro, byte button) = 0;
-    virtual ButtonMacro getMacro(byte button) = 0;
+    /* Return the number of key configurations defined
+     * in the ConfigTable */
     virtual uint8_t getNumConfigs() = 0;
+    
+    /* Return the ButtonMacro for the specified button number
+     * within the currently active key configuration. */
+    virtual ButtonMacro getMacro(uint8_t button) = 0;
+    
+    /* Store the ButtonMacro for the specified button number
+     * within the currently active key configuration */
+    virtual void storeMacro(ButtonMacro macro, uint8_t button) = 0;
+    
+    /* Return the ConfigInfo record for the currently
+     * active key configuration */
     virtual ConfigInfo getConfigInfo() = 0;
+    
+    /* Change the active key configuration to the one specified
+     * by an index into the ConfigTable.config[] array */
     virtual void setActiveConfig(uint8_t index) = 0;
+    
+    /* Return an index into the ConfigTable.configs[] array
+     * for the currently active key configuration */
     virtual uint8_t getActiveConfig() = 0;
+    
+    /* Update the EEProm with the specified ConfigTable record */
+    virtual void storeConfigTable(ConfigTable value) = 0;
+    
+    /* Update the EEProm with a ConfigInfo record at the
+     * specified memory page. */
+    virtual void storeConfigInfo(ConfigInfo value, uint16_t page) = 0;
+    
+    /* Update the EEProm with a ButtonMacro record at the
+     * specified memory page. */
+    virtual void storeButtonMacro(ButtonMacro macro, uint16_t page) = 0;
+    
+    /* Return the ConfigTable record from the EEProm */
+    virtual ConfigTable getConfigTableFromEEProm() = 0;
+    
+    /* Return a ConfigInfo record from the specified memory page */
+    virtual ConfigInfo getConfigInfoFromEEProm(uint16_t page) = 0;
+    
+    /* Return a ButtonMacro record from the specified memory page */
+    virtual ButtonMacro getButtonMacroFromEEProm(uint16_t page) = 0;
     
 };
 
