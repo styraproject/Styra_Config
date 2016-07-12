@@ -39,6 +39,7 @@ class ArduinoDevice:
 # Generated from ArduinoKeyCodes
 # cat ArduinoKeyCodes.txt | awk 'BEGIN {print "{" } NR > 2 {print "\x27" $1 "\x27" ":" "\x27" $3 "\x27," } END {print "}"} '
 arduinoKeycodeDict = {
+    'KEY_SPACE':'32',
     'KEY_LEFT_CTRL':'128',
     'KEY_LEFT_SHIFT':'129',
     'KEY_LEFT_ALT':'130',
