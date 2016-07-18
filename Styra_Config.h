@@ -34,10 +34,16 @@
 #define LATCH 4
 #define PRESS 5
 
+/* Define device tye for each button */
+#define STYRA_MOUSE 1
+#define STYRA_KEYBOARD 0
+
+
 typedef struct {
     byte action[28];
     byte action_type;
-    byte unused[2];
+    byte device_type;
+    byte unused[1];
     byte record_type;
 } ButtonMacro;
 
@@ -65,6 +71,9 @@ public:
     }
     byte getActionType() {
         return _current_macro.action_type;
+    }
+    byte getDeviceType() {
+        return _current_macro.device_type;
     }
     byte getNextKey() {
         if (_index < 28) {

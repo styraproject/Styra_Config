@@ -86,6 +86,11 @@ styraActionTypeDict = {
     'WHEEL_LOCK':7
 }
 
+styraDeviceTypeDict = {
+    'MOUSE':1,
+    'KEYBOARD':0
+}
+
 styraRecordTypeDict = {
     'BUTTON_MACRO':100,
     'CONFIG_INFO':101,
@@ -213,11 +218,11 @@ def getPackedConfigTable():
     
     return s.pack(*byte_list)
     
-def getPackedButtonMacro(keys_string,action_type):
+def getPackedButtonMacro(keys_string,action_type,device_type):
     s = struct.Struct('28B B 2B B')
     byte_list = getKeyBytes(keys_string,action_type)[:28]
     byte_list.append(styraActionTypeDict[action_type])
-    byte_list.append(255)
+    byte_list.append(styraDeviceTypeDict[device_type])
     byte_list.append(255)
     byte_list.append(styraRecordTypeDict['BUTTON_MACRO'])
     print ("Byte List:  %s" % byte_list)
@@ -409,7 +414,7 @@ if __name__ == '__main__':
                         time.sleep(0.5)
                     arduino.flushInput()
                     # Send the macro itself
-                    arduino.write(getPackedButtonMacro(config.get(button,'keys'),config.get(button,'action')))
+                    arduino.write(getPackedButtonMacro(config.get(button,'keys'),config.get(button,'action'),config.get(button,'device')))
                     while struct.unpack("B", arduino.read(1))[0] != arduinoMesgDict['READY']:
                         sys.stdout.write('>')
                         sys.stdout.flush()
