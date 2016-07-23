@@ -242,7 +242,7 @@ def displayMenu():
 
 def arduinoReset(arduino):
     # reset the arduino
-    arduino.setDTR(level=False)
+    arduino.setDTR()
     time.sleep(0.5)
     # ensure there is no stale data in the buffer
     arduino.flushInput()
